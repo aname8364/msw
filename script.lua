@@ -1,18 +1,8 @@
-local function read_string(address, is_wide_char)
-    local length = readInteger(address+0x10)
-    local data
-    if is_wide_char then
-       data = readString(address+0x14, length*2, true)
-    else
-       data = readString(address+0x14, length)
-    end
-    return data
- end
-
- local function do_action()
-    local action_name = RDX
-    printf("DoAction: %s", read_string(action_name, true))
- end
-
- openProcess("msw.exe")
- debug_setBreakpoint(0x7FFA733E8520, do_action)
+function on_world_logic(instance)
+   local entity = get_entity(instance)
+   if not check_player(entity) and not check_world(entity) and not check_map(entity) then
+      local pos = get_pos(instance)
+      local my_pos = get_my_pos()
+      set_pos(pos, my_pos)
+   end
+end
